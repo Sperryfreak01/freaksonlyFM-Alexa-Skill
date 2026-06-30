@@ -96,6 +96,8 @@
     }
     .readout::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
     .readout::after  { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+    .readout { text-decoration: none; transition: border-color .15s; }
+    .readout:hover { border-color: var(--accent); }
     .readout b { color: var(--fg); font-weight: 700; }
     .freq { display: flex; align-items: center; gap: 12px; }
     .readout .live-badge { color: var(--accent); font-weight: 700; white-space: nowrap; }
@@ -153,13 +155,13 @@
       <h1>Say play.<br><span class="red">You're in.</span></h1>
       <p class="lede">FREAKS ONLY FM on your Echo. Hands-free. No phone, no fuss.</p>
 
-      <div class="readout">
+      <a class="readout" href="https://freaksonly.fm" target="_blank" rel="noopener">
         <div class="freq">
           <span class="eq"><i></i><i></i><i></i><i></i></span>
           <span><b>FREAKS ONLY FM</b> · Los Angeles</span>
         </div>
         <span class="live-badge">Live · 24/7</span>
-      </div>
+      </a>
 
       <a class="cta" href="#get">Tune In ↓</a>
     </header>
