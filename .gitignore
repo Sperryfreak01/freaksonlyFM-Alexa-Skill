@@ -1,0 +1,20 @@
+# ASK CLI deployment state — contains AWS account IDs, Lambda ARNs, skill ID
+.ask/ask-states.json
+
+# Dependencies installed by ASK CLI at deploy time
+.ask/lambda/
+
+# Python bytecode
+**/__pycache__/
+*.pyc
+*.pyo
+
+# Build artifacts
+*.zip
+
+# Local tooling / editor state (may contain machine-specific paths & config)
+.claude/
+logs/
+
+# OS cruft
+.DS_Store

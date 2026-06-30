@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>FREAKS ONLY FM on Alexa | Listen Live, Hands-Free</title>
+  <meta name="title" content="FREAKS ONLY FM on Alexa | Listen Live, Hands-Free" />
+  <meta name="description" content="Stream FREAKS ONLY FM on any Echo. Just say the word. Punk, funk, disco, and post-punk from Los Angeles — live 24/7, no app, no fuss." />
+  <meta name="author" content="Travis Holcombe" />
+  <meta name="robots" content="index, follow" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="FREAKS ONLY FM on Alexa" />
+  <meta property="og:description" content="Stream FREAKS ONLY FM on any Echo. Just say the word." />
+  <meta property="og:image" content="https://freaksonly.fm/freaks-only-logo.jpg" />
+  <meta property="og:site_name" content="FREAKS ONLY FM" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="FREAKS ONLY FM on Alexa" />
+  <meta name="twitter:description" content="Stream FREAKS ONLY FM on any Echo. Just say the word." />
+  <meta name="twitter:image" content="https://freaksonly.fm/freaks-only-logo.jpg" />
+
+  <link rel="icon" href="https://freaksonly.fm/freaks-only-logo.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;0,800;1,400;1,700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: hsl(0 0% 3.9%);
+      --fg: hsl(0 0% 98%);
+      --muted: hsl(0 0% 63.9%);
+      --line: hsl(0 0% 16%);
+      --accent: hsl(0 72% 51%);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: "JetBrains Mono", monospace;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+    a { color: inherit; }
+
+    .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+    /* ---- top bar ---- */
+    .bar {
+      border-bottom: 1px solid var(--line);
+      padding: 18px 0;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+    }
+    .bar .dot { color: var(--accent); }
+    .bar a.back { color: var(--muted); text-decoration: none; }
+    .bar a.back:hover { color: var(--fg); }
+
+    /* ---- hero ---- */
+    .hero { padding: 72px 0 56px; border-bottom: 1px solid var(--line); }
+    .kicker {
+      color: var(--accent); font-size: 12px; letter-spacing: .2em;
+      text-transform: uppercase; margin-bottom: 22px;
+    }
+    h1 {
+      font-weight: 800; font-size: clamp(34px, 8vw, 60px);
+      line-height: 1.02; letter-spacing: -.03em; text-transform: uppercase;
+    }
+    h1 .red { color: var(--accent); }
+    .sub {
+      color: var(--muted); margin-top: 22px; max-width: 52ch; font-size: 15px;
+    }
+    .cta {
+      display: inline-block; margin-top: 34px; padding: 14px 26px;
+      background: var(--accent); color: #fff; text-decoration: none;
+      font-weight: 700; font-size: 13px; letter-spacing: .12em;
+      text-transform: uppercase; border: 1px solid var(--accent);
+      transition: background .15s, color .15s;
+    }
+    .cta:hover { background: transparent; color: var(--accent); }
+
+    /* ---- sections ---- */
+    section { padding: 56px 0; border-bottom: 1px solid var(--line); }
+    .lbl {
+      color: var(--accent); font-size: 12px; letter-spacing: .2em;
+      text-transform: uppercase; margin-bottom: 26px;
+    }
+    h2 { font-size: 22px; text-transform: uppercase; letter-spacing: -.01em; margin-bottom: 18px; }
+
+    /* numbered steps */
+    ol.steps { list-style: none; counter-reset: s; }
+    ol.steps li {
+      counter-increment: s; position: relative; padding: 16px 0 16px 52px;
+      border-top: 1px solid var(--line);
+    }
+    ol.steps li:first-child { border-top: none; }
+    ol.steps li::before {
+      content: counter(s, decimal-leading-zero);
+      position: absolute; left: 0; top: 16px;
+      color: var(--accent); font-weight: 700; font-size: 13px;
+    }
+    .step-note { color: var(--muted); font-size: 13px; }
+
+    /* command list */
+    .cmd { border-top: 1px solid var(--line); padding: 14px 0; display: flex; gap: 16px; align-items: baseline; flex-wrap: wrap; }
+    .cmd:first-child { border-top: none; }
+    .say {
+      color: var(--fg); font-weight: 700; white-space: nowrap;
+    }
+    .say::before { content: "“"; color: var(--accent); }
+    .say::after { content: "”"; color: var(--accent); }
+    .does { color: var(--muted); font-size: 13px; }
+
+    .quote { color: var(--muted); font-style: italic; max-width: 56ch; }
+
+    /* ---- footer ---- */
+    footer { padding: 40px 0 64px; color: var(--muted); font-size: 12px; letter-spacing: .06em; }
+    footer a { color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--accent); }
+    footer .row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="bar">
+      <span><span class="dot">●</span> ON AIR — 24/7</span>
+      <a class="back" href="https://freaksonly.fm">freaksonly.fm ↗</a>
+    </div>
+
+    <header class="hero">
+      <div class="kicker">Now on Alexa</div>
+      <h1>Freaks Only FM,<br><span class="red">just say play.</span></h1>
+      <p class="sub">
+        Great music on your Echo speaker — no phone, no menus, no fiddling.
+        Just talk to Alexa and the underground's on. Los Angeles radio,
+        playing around the clock.
+      </p>
+      <a class="cta" href="#install">How to get it</a>
+    </header>
+
+    <section id="about">
+      <div class="lbl">// The short version</div>
+      <p class="quote">
+        It's the radio station, on your Echo. Tell Alexa to play Freaks Only
+        and you're listening — punk, funk, disco, and all the good stuff,
+        going 24/7. Free. Nothing to sign up for.
+      </p>
+    </section>
+
+    <section id="install">
+      <div class="lbl">// Getting it</div>
+      <h2>The easy way — just ask</h2>
+      <ol class="steps">
+        <li>
+          Walk up to your Echo and say:
+          <strong>“Alexa, enable Freaks Only FM.”</strong>
+          <div class="step-note">She'll find it and switch it on. Takes a few seconds.</div>
+        </li>
+        <li>
+          Then say: <strong>“Alexa, play Freaks Only.”</strong>
+          <div class="step-note">That's it. You're listening. Welcome.</div>
+        </li>
+      </ol>
+
+      <h2 style="margin-top:42px;">Rather tap than talk?</h2>
+      <ol class="steps">
+        <li>
+          Open the <strong>Alexa app</strong> on your phone.
+        </li>
+        <li>
+          Tap the search icon and type <strong>Freaks Only FM</strong>.
+        </li>
+        <li>
+          Tap the skill, then tap <strong>Enable</strong>. Done — now just ask
+          Alexa to play it.
+        </li>
+      </ol>
+    </section>
+
+    <section id="use">
+      <div class="lbl">// Once it's on</div>
+      <h2>Things to say</h2>
+
+      <div class="cmd"><span class="say">Alexa, play Freaks Only</span><span class="does">→ start the music</span></div>
+      <div class="cmd"><span class="say">Alexa, what's playing?</span><span class="does">→ she tells you the song</span></div>
+      <div class="cmd"><span class="say">Alexa, turn it up</span><span class="does">→ more, louder</span></div>
+      <div class="cmd"><span class="say">Alexa, pause</span><span class="does">→ take a breather</span></div>
+      <div class="cmd"><span class="say">Alexa, resume</span><span class="does">→ back to it</span></div>
+      <div class="cmd"><span class="say">Alexa, stop</span><span class="does">→ turn it off</span></div>
+
+      <p class="step-note" style="margin-top:24px;">
+        Got more than one Echo? Just say it to the one in the room you're in,
+        and the music plays right there.
+      </p>
+    </section>
+
+    <footer>
+      <div class="row">
+        <span>FREAKS ONLY FM — Los Angeles</span>
+        <span>Curated by <a href="https://www.instagram.com/travisholcombe">Travis Holcombe</a> · <a href="https://freaksonly.fm">freaksonly.fm</a></span>
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>

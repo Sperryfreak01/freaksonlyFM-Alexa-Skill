@@ -1,0 +1,60 @@
+{
+  "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "en-US": {
+          "name": "Freaks Only FM",
+          "summary": "Stream Freaks Only FM — 24/7 live internet radio from Los Angeles.",
+          "description": "Listen to Freaks Only FM, a 24/7 live internet radio station broadcasting from Los Angeles, curated by Travis Holcombe. Featuring funk, soul, and everything in between.\n\nJust say \"Alexa, open Freaks Only\" to start streaming.\n\nStreaming powered by Live365.",
+          "examplePhrases": [
+            "Alexa, open Freaks Only",
+            "Alexa, play Freaks Only",
+            "Alexa, ask Freaks Only to play"
+          ],
+          "keywords": [
+            "radio",
+            "funk",
+            "soul",
+            "music",
+            "los angeles",
+            "internet radio",
+            "live radio"
+          ],
+          "smallIconUri": "https://freaksonlyfm-alexa-assets.s3.amazonaws.com/icon108.png",
+          "largeIconUri": "https://freaksonlyfm-alexa-assets.s3.amazonaws.com/icon512.png"
+        }
+      },
+      "isAvailableWorldwide": true,
+      "testingInstructions": "Enable the skill and say 'Alexa, open Freaks Only' to begin streaming.",
+      "category": "STREAMING_SERVICE",
+      "distributionCountries": []
+    },
+    "apis": {
+      "custom": {
+        "interfaces": [
+          {
+            "type": "AUDIO_PLAYER"
+          }
+        ],
+        "endpoint": {
+          "uri": "arn:aws:lambda:us-east-1:000000000000:function:ask-freaksonlyfm-default-default"
+        }
+      }
+    },
+    "manifestVersion": "1.0",
+    "permissions": [],
+    "privacyAndCompliance": {
+      "allowsPurchases": false,
+      "usesPersonalInfo": false,
+      "isChildDirected": false,
+      "isExportCompliant": true,
+      "containsAds": false,
+      "locales": {
+        "en-US": {
+          "privacyPolicyUrl": "https://gist.github.com/Sperryfreak01/549039cb4f61a8eaa9140f51769e8843",
+          "termsOfUseUrl": "https://gist.github.com/Sperryfreak01/549039cb4f61a8eaa9140f51769e8843"
+        }
+      }
+    }
+  }
+}
