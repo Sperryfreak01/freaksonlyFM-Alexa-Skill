@@ -4,23 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>FREAKS ONLY FM on Alexa | Listen Live, Hands-Free</title>
-  <meta name="title" content="FREAKS ONLY FM on Alexa | Listen Live, Hands-Free" />
-  <meta name="description" content="Stream FREAKS ONLY FM on any Echo. Just say the word. Punk, funk, disco, and post-punk from Los Angeles — live 24/7, no app, no fuss." />
-  <meta name="author" content="Travis Holcombe" />
+  <title>FREAKS ONLY FM on Alexa — Unofficial Tune-In Tool</title>
+  <meta name="description" content="An unofficial, fan-made Alexa skill that tunes your Echo to FREAKS ONLY FM. Not affiliated with the station. Just say play." />
   <meta name="robots" content="index, follow" />
 
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="FREAKS ONLY FM on Alexa" />
-  <meta property="og:description" content="Stream FREAKS ONLY FM on any Echo. Just say the word." />
-  <meta property="og:image" content="https://freaksonly.fm/freaks-only-logo.jpg" />
-  <meta property="og:site_name" content="FREAKS ONLY FM" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="FREAKS ONLY FM on Alexa" />
-  <meta name="twitter:description" content="Stream FREAKS ONLY FM on any Echo. Just say the word." />
-  <meta name="twitter:image" content="https://freaksonly.fm/freaks-only-logo.jpg" />
+  <meta property="og:title" content="FREAKS ONLY FM on Alexa — Unofficial" />
+  <meta property="og:description" content="Fan-made Alexa skill. Tune your Echo to the station. Just say play." />
 
-  <link rel="icon" href="https://freaksonly.fm/freaks-only-logo.jpg" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230a0a0a'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23dc3030'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;0,800;1,400;1,700&display=swap" rel="stylesheet" />
@@ -30,7 +22,7 @@
       --bg: hsl(0 0% 3.9%);
       --fg: hsl(0 0% 98%);
       --muted: hsl(0 0% 63.9%);
-      --line: hsl(0 0% 16%);
+      --line: hsl(0 0% 17%);
       --accent: hsl(0 72% 51%);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -40,167 +32,171 @@
       color: var(--fg);
       font-family: "JetBrains Mono", monospace;
       -webkit-font-smoothing: antialiased;
-      line-height: 1.6;
-      font-size: 15px;
+      line-height: 1.55;
+      font-size: 14px;
     }
     a { color: inherit; }
+    strong { font-weight: 700; }
 
-    .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+    .wrap { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+
+    /* ---- scrolling ticker (also the disclaimer) ---- */
+    .ticker {
+      border-bottom: 1px solid var(--line);
+      background: var(--accent);
+      color: #fff;
+      overflow: hidden; white-space: nowrap;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+    }
+    .ticker__track { display: inline-block; padding: 7px 0; animation: ticker 26s linear infinite; }
+    .ticker__track span { padding: 0 24px; }
+    @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
     /* ---- top bar ---- */
     .bar {
-      border-bottom: 1px solid var(--line);
-      padding: 18px 0;
       display: flex; align-items: center; justify-content: space-between;
-      font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+      padding: 16px 0; border-bottom: 1px solid var(--line);
+      font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
     }
-    .bar .dot { color: var(--accent); }
-    .bar a.back { color: var(--muted); text-decoration: none; }
-    .bar a.back:hover { color: var(--fg); }
+    .mark { font-weight: 800; letter-spacing: .04em; }
+    .mark .sep { color: var(--accent); }
+    .onair { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+    .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s cubic-bezier(.4,0,.6,1) infinite; }
+    @keyframes pulse { 50% { opacity: .35; } }
 
-    /* ---- hero ---- */
-    .hero { padding: 72px 0 56px; border-bottom: 1px solid var(--line); }
-    .kicker {
-      color: var(--accent); font-size: 12px; letter-spacing: .2em;
-      text-transform: uppercase; margin-bottom: 22px;
-    }
-    h1 {
-      font-weight: 800; font-size: clamp(34px, 8vw, 60px);
-      line-height: 1.02; letter-spacing: -.03em; text-transform: uppercase;
-    }
+    /* equalizer */
+    .eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+    .eq i { width: 2px; background: var(--accent); animation: eq 1s ease-in-out infinite; }
+    .eq i:nth-child(1){height:40%;animation-delay:-.4s}
+    .eq i:nth-child(2){height:90%;animation-delay:-.1s}
+    .eq i:nth-child(3){height:60%;animation-delay:-.7s}
+    .eq i:nth-child(4){height:100%;animation-delay:-.2s}
+    @keyframes eq { 0%,100% { transform: scaleY(.3); } 50% { transform: scaleY(1); } }
+
+    /* ---- hero / receiver panel ---- */
+    .hero { padding: 56px 0 44px; }
+    .kicker { color: var(--accent); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; margin-bottom: 20px; }
+    h1 { font-weight: 800; font-size: clamp(38px, 10vw, 66px); line-height: .98; letter-spacing: -.04em; text-transform: uppercase; }
     h1 .red { color: var(--accent); }
-    .sub {
-      color: var(--muted); margin-top: 22px; max-width: 52ch; font-size: 15px;
+    .lede { color: var(--muted); margin-top: 18px; max-width: 40ch; }
+
+    /* receiver readout */
+    .readout {
+      margin-top: 30px; border: 1px solid var(--line);
+      display: grid; grid-template-columns: 1fr auto; gap: 10px;
+      padding: 14px 16px; align-items: center;
+      font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
     }
-    .cta {
-      display: inline-block; margin-top: 34px; padding: 14px 26px;
-      background: var(--accent); color: #fff; text-decoration: none;
-      font-weight: 700; font-size: 13px; letter-spacing: .12em;
-      text-transform: uppercase; border: 1px solid var(--accent);
-      transition: background .15s, color .15s;
-    }
+    .readout b { color: var(--fg); font-weight: 700; }
+    .freq { display: flex; align-items: center; gap: 12px; }
+
+    .cta { display: inline-block; margin-top: 26px; padding: 13px 30px; background: var(--accent); color: #fff; text-decoration: none; font-weight: 700; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; border: 1px solid var(--accent); transition: background .15s, color .15s; }
     .cta:hover { background: transparent; color: var(--accent); }
 
-    /* ---- sections ---- */
-    section { padding: 56px 0; border-bottom: 1px solid var(--line); }
-    .lbl {
-      color: var(--accent); font-size: 12px; letter-spacing: .2em;
-      text-transform: uppercase; margin-bottom: 26px;
-    }
-    h2 { font-size: 22px; text-transform: uppercase; letter-spacing: -.01em; margin-bottom: 18px; }
+    /* ---- console sections ---- */
+    section { padding: 38px 0; border-top: 1px solid var(--line); }
+    .lbl { color: var(--accent); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 8px; }
+    h2 { font-size: 20px; text-transform: uppercase; letter-spacing: -.01em; margin-bottom: 22px; }
+    h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 26px 0 14px; }
 
-    /* numbered steps */
     ol.steps { list-style: none; counter-reset: s; }
-    ol.steps li {
-      counter-increment: s; position: relative; padding: 16px 0 16px 52px;
-      border-top: 1px solid var(--line);
-    }
+    ol.steps li { counter-increment: s; position: relative; padding: 13px 0 13px 46px; border-top: 1px solid var(--line); }
     ol.steps li:first-child { border-top: none; }
-    ol.steps li::before {
-      content: counter(s, decimal-leading-zero);
-      position: absolute; left: 0; top: 16px;
-      color: var(--accent); font-weight: 700; font-size: 13px;
-    }
-    .step-note { color: var(--muted); font-size: 13px; }
+    ol.steps li::before { content: counter(s, decimal-leading-zero); position: absolute; left: 0; top: 13px; color: var(--accent); font-weight: 700; }
+    .note { color: var(--muted); font-size: 12px; margin-top: 3px; }
 
-    /* command list */
-    .cmd { border-top: 1px solid var(--line); padding: 14px 0; display: flex; gap: 16px; align-items: baseline; flex-wrap: wrap; }
+    .cmd { border-top: 1px solid var(--line); padding: 12px 0; display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; }
     .cmd:first-child { border-top: none; }
-    .say {
-      color: var(--fg); font-weight: 700; white-space: nowrap;
-    }
-    .say::before { content: "“"; color: var(--accent); }
-    .say::after { content: "”"; color: var(--accent); }
-    .does { color: var(--muted); font-size: 13px; }
+    .say { font-weight: 700; white-space: nowrap; }
+    .say::before, .say::after { content: '"'; color: var(--accent); }
+    .does { color: var(--muted); font-size: 12px; }
 
-    .quote { color: var(--muted); font-style: italic; max-width: 56ch; }
+    /* disclaimer panel */
+    .disc { border: 1px solid var(--accent); padding: 18px 18px; font-size: 12px; color: var(--muted); }
+    .disc .lbl { margin-bottom: 12px; }
+    .disc p { margin-bottom: 10px; }
+    .disc p:last-child { margin-bottom: 0; }
+    .disc a { color: var(--fg); border-bottom: 1px solid var(--accent); text-decoration: none; }
 
-    /* ---- footer ---- */
-    footer { padding: 40px 0 64px; color: var(--muted); font-size: 12px; letter-spacing: .06em; }
-    footer a { color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--accent); }
-    footer .row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    footer { padding: 30px 0 56px; color: var(--muted); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
   </style>
 </head>
 <body>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+      <span>● Unofficial fan-made tool // Not affiliated with or endorsed by Freaks Only FM // Built by a listener //</span>
+      <span>● Unofficial fan-made tool // Not affiliated with or endorsed by Freaks Only FM // Built by a listener //</span>
+    </div>
+  </div>
+
   <div class="wrap">
 
     <div class="bar">
-      <span><span class="dot">●</span> ON AIR — 24/7</span>
-      <a class="back" href="https://freaksonly.fm">freaksonly.fm ↗</a>
+      <span class="mark">ALEXA TUNER <span class="sep">//</span> UNOFFICIAL</span>
+      <span class="onair"><span class="dot"></span> On Air 24/7</span>
     </div>
 
     <header class="hero">
-      <div class="kicker">Now on Alexa</div>
-      <h1>Freaks Only FM,<br><span class="red">just say play.</span></h1>
-      <p class="sub">
-        Great music on your Echo speaker — no phone, no menus, no fiddling.
-        Just talk to Alexa and the underground's on. Los Angeles radio,
-        playing around the clock.
-      </p>
-      <a class="cta" href="#install">How to get it</a>
+      <div class="kicker">Unofficial Alexa Skill</div>
+      <h1>Say play.<br><span class="red">You're in.</span></h1>
+      <p class="lede">FREAKS ONLY FM on your Echo. Hands-free. No phone, no fuss.</p>
+
+      <div class="readout">
+        <div class="freq">
+          <span class="eq"><i></i><i></i><i></i><i></i></span>
+          <span><b>FREAKS ONLY FM</b> · Los Angeles</span>
+        </div>
+        <span>Live · 24/7</span>
+      </div>
+
+      <a class="cta" href="#get">Tune In ↓</a>
     </header>
 
+    <section id="get">
+      <div class="lbl">// Get it</div>
+      <h2>Just ask Alexa</h2>
+      <ol class="steps">
+        <li>
+          Say <strong>“Alexa, enable Freaks Only FM.”</strong>
+          <div class="note">She finds it and switches it on.</div>
+        </li>
+        <li>
+          Say <strong>“Alexa, play Freaks Only.”</strong>
+          <div class="note">That's it. You're listening.</div>
+        </li>
+      </ol>
+
+      <h3>// Rather tap?</h3>
+      <ol class="steps">
+        <li>Alexa app → search <strong>Freaks Only FM</strong>.</li>
+        <li>Tap <strong>Enable</strong>. Then ask Alexa to play it.</li>
+      </ol>
+    </section>
+
+    <section id="say">
+      <div class="lbl">// Say</div>
+      <h2>Once it's on</h2>
+      <div class="cmd"><span class="say">Alexa, play Freaks Only</span><span class="does">→ start</span></div>
+      <div class="cmd"><span class="say">Alexa, what's playing?</span><span class="does">→ the track</span></div>
+      <div class="cmd"><span class="say">Alexa, turn it up</span><span class="does">→ louder</span></div>
+      <div class="cmd"><span class="say">Alexa, pause</span><span class="does">→ hold</span></div>
+      <div class="cmd"><span class="say">Alexa, stop</span><span class="does">→ off</span></div>
+    </section>
+
     <section id="about">
-      <div class="lbl">// The short version</div>
-      <p class="quote">
-        It's the radio station, on your Echo. Tell Alexa to play Freaks Only
-        and you're listening — punk, funk, disco, and all the good stuff,
-        going 24/7. Free. Nothing to sign up for.
-      </p>
-    </section>
-
-    <section id="install">
-      <div class="lbl">// Getting it</div>
-      <h2>The easy way — just ask</h2>
-      <ol class="steps">
-        <li>
-          Walk up to your Echo and say:
-          <strong>“Alexa, enable Freaks Only FM.”</strong>
-          <div class="step-note">She'll find it and switch it on. Takes a few seconds.</div>
-        </li>
-        <li>
-          Then say: <strong>“Alexa, play Freaks Only.”</strong>
-          <div class="step-note">That's it. You're listening. Welcome.</div>
-        </li>
-      </ol>
-
-      <h2 style="margin-top:42px;">Rather tap than talk?</h2>
-      <ol class="steps">
-        <li>
-          Open the <strong>Alexa app</strong> on your phone.
-        </li>
-        <li>
-          Tap the search icon and type <strong>Freaks Only FM</strong>.
-        </li>
-        <li>
-          Tap the skill, then tap <strong>Enable</strong>. Done — now just ask
-          Alexa to play it.
-        </li>
-      </ol>
-    </section>
-
-    <section id="use">
-      <div class="lbl">// Once it's on</div>
-      <h2>Things to say</h2>
-
-      <div class="cmd"><span class="say">Alexa, play Freaks Only</span><span class="does">→ start the music</span></div>
-      <div class="cmd"><span class="say">Alexa, what's playing?</span><span class="does">→ she tells you the song</span></div>
-      <div class="cmd"><span class="say">Alexa, turn it up</span><span class="does">→ more, louder</span></div>
-      <div class="cmd"><span class="say">Alexa, pause</span><span class="does">→ take a breather</span></div>
-      <div class="cmd"><span class="say">Alexa, resume</span><span class="does">→ back to it</span></div>
-      <div class="cmd"><span class="say">Alexa, stop</span><span class="does">→ turn it off</span></div>
-
-      <p class="step-note" style="margin-top:24px;">
-        Got more than one Echo? Just say it to the one in the room you're in,
-        and the music plays right there.
-      </p>
+      <div class="disc">
+        <div class="lbl">// The fine print</div>
+        <p>Independent fan project. <strong>Not affiliated with, endorsed by, or operated by FREAKS ONLY FM</strong> or its owners.</p>
+        <p>This skill just points Alexa at the station's public stream. The music, name, and brand belong to FREAKS ONLY FM. Streaming via Live365.</p>
+        <p>The real station lives at <a href="https://freaksonly.fm">freaksonly.fm</a>.</p>
+      </div>
     </section>
 
     <footer>
-      <div class="row">
-        <span>FREAKS ONLY FM — Los Angeles</span>
-        <span>Curated by <a href="https://www.instagram.com/travisholcombe">Travis Holcombe</a> · <a href="https://freaksonly.fm">freaksonly.fm</a></span>
-      </div>
+      <span>Fan-made · Not official</span>
+      <span>Powered by Live365</span>
     </footer>
 
   </div>
