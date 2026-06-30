@@ -63,6 +63,16 @@
     .mark { font-weight: 800; letter-spacing: .04em; }
     .mark .sep { color: var(--accent); }
 
+    /* live status indicator */
+    .status { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+    .status::before {
+      content: ''; display: inline-block;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
     /* equalizer */
     .eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
     .eq i { width: 2px; background: var(--accent); animation: eq 1s ease-in-out infinite; }
@@ -81,21 +91,33 @@
 
     /* receiver readout */
     .readout {
-      margin-top: 30px; border: 1px solid var(--line);
+      margin-top: 32px; border: 1px solid var(--line);
       display: grid; grid-template-columns: 1fr auto; gap: 10px;
       padding: 14px 16px; align-items: center;
       font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+      position: relative;
     }
+    /* corner tick marks — subtle console framing */
+    .readout::before, .readout::after {
+      content: '';
+      position: absolute; width: 8px; height: 8px;
+      border-color: var(--accent); border-style: solid;
+      pointer-events: none;
+    }
+    .readout::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+    .readout::after  { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
     .readout b { color: var(--fg); font-weight: 700; }
     .freq { display: flex; align-items: center; gap: 12px; }
+    .readout .live-badge { color: var(--accent); font-weight: 700; white-space: nowrap; }
 
-    .cta { display: inline-block; margin-top: 26px; padding: 13px 30px; background: var(--accent); color: #fff; text-decoration: none; font-weight: 700; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; border: 1px solid var(--accent); transition: background .15s, color .15s; }
+    .cta { display: inline-block; margin-top: 28px; padding: 13px 30px; background: var(--accent); color: #fff; text-decoration: none; font-weight: 700; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; border: 1px solid var(--accent); transition: background .15s, color .15s; }
     .cta:hover { background: transparent; color: var(--accent); }
 
     /* ---- console sections ---- */
-    section { padding: 38px 0; border-top: 1px solid var(--line); }
+    section { padding: 40px 0; border-top: 1px solid var(--line); }
     .lbl { color: var(--accent); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 8px; }
     h2 { font-size: 20px; text-transform: uppercase; letter-spacing: -.01em; margin-bottom: 22px; }
+    h2.h2--spaced { margin-top: 36px; }
 
     ol.steps { list-style: none; counter-reset: s; }
     ol.steps li { counter-increment: s; position: relative; padding: 13px 0 13px 46px; border-top: 1px solid var(--line); }
@@ -110,13 +132,23 @@
     .does { color: var(--muted); font-size: 12px; }
 
     /* disclaimer panel */
-    .disc { border: 1px solid var(--accent); padding: 18px 18px; font-size: 12px; color: var(--muted); }
+    .disc { border: 1px solid var(--accent); padding: 18px; font-size: 12px; color: var(--muted); }
     .disc .lbl { margin-bottom: 12px; }
     .disc p { margin-bottom: 10px; }
     .disc p:last-child { margin-bottom: 0; }
     .disc a { color: var(--fg); border-bottom: 1px solid var(--accent); text-decoration: none; }
 
-    footer { padding: 30px 0 56px; color: var(--muted); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+    /* #about section — extra bottom breathing room before footer */
+    #about { padding-bottom: 48px; }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 24px 0 48px; color: var(--muted); font-size: 11px;
+      letter-spacing: .08em; text-transform: uppercase;
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    }
+    footer a { border-bottom: 1px solid var(--line); text-decoration: none; transition: color .15s, border-color .15s; }
+    footer a:hover { color: var(--fg); border-color: var(--fg); }
   </style>
 </head>
 <body>
@@ -132,6 +164,7 @@
 
     <div class="bar">
       <span class="mark">ALEXA TUNER <span class="sep">//</span> UNOFFICIAL</span>
+      <span class="status">LIVE</span>
     </div>
 
     <header class="hero">
@@ -144,7 +177,7 @@
           <span class="eq"><i></i><i></i><i></i><i></i></span>
           <span><b>FREAKS ONLY FM</b> · Los Angeles</span>
         </div>
-        <span>Live · 24/7</span>
+        <span class="live-badge">Live · 24/7</span>
       </div>
 
       <a class="cta" href="#get">Tune In ↓</a>
@@ -155,16 +188,16 @@
       <h2>Just ask Alexa</h2>
       <ol class="steps">
         <li>
-          Say <strong>“Alexa, enable Freaks Only FM.”</strong>
+          Say <strong>"Alexa, enable Freaks Only FM."</strong>
           <div class="note">She finds it and switches it on.</div>
         </li>
         <li>
-          Say <strong>“Alexa, play Freaks Only.”</strong>
+          Say <strong>"Alexa, play Freaks Only."</strong>
           <div class="note">That's it. You're listening.</div>
         </li>
       </ol>
 
-      <h2 style="margin-top:34px;">Rather tap?</h2>
+      <h2 class="h2--spaced">Rather tap?</h2>
       <ol class="steps">
         <li>Alexa app → search <strong>Freaks Only FM</strong>.</li>
         <li>Tap <strong>Enable</strong>. Then ask Alexa to play it.</li>
@@ -181,7 +214,7 @@
       <div class="cmd"><span class="say">Alexa, stop</span><span class="does">→ off</span></div>
     </section>
 
-    <section id="about" style="padding-bottom:64px;">
+    <section id="about">
       <div class="disc">
         <div class="lbl">// The fine print</div>
         <p>Independent fan project. <strong>Not affiliated with, endorsed by, or operated by FREAKS ONLY FM</strong> or its owners.</p>
@@ -189,6 +222,11 @@
         <p>The real station lives at <a href="https://freaksonly.fm">freaksonly.fm</a>.</p>
       </div>
     </section>
+
+    <footer>
+      <span>&copy; Fan project &mdash; not affiliated with FREAKS ONLY FM</span>
+      <a href="https://freaksonly.fm">freaksonly.fm &rarr;</a>
+    </footer>
 
   </div>
 
