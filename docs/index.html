@@ -40,7 +40,7 @@
 
     .wrap { max-width: 680px; margin: 0 auto; padding: 0 20px; }
 
-    /* ---- scrolling ticker (also the disclaimer) ---- */
+    /* ---- live now-playing ticker ---- */
     .ticker {
       border-bottom: 1px solid var(--line);
       background: var(--accent);
@@ -49,8 +49,9 @@
       font-size: 11px; font-weight: 700;
       letter-spacing: .14em; text-transform: uppercase;
     }
-    .ticker__track { display: inline-block; padding: 7px 0; animation: ticker 26s linear infinite; }
-    .ticker__track span { padding: 0 24px; }
+    .ticker__track { display: inline-block; padding: 7px 0; animation: ticker 30s linear infinite; }
+    .ticker__track .ti { padding: 0 18px; }
+    .ticker__track .ti.now { background: #fff; color: var(--accent); }
     @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
     /* ---- top bar ---- */
@@ -121,9 +122,9 @@
 <body>
 
   <div class="ticker" aria-hidden="true">
-    <div class="ticker__track">
-      <span>● Unofficial fan-made tool // Not affiliated with or endorsed by Freaks Only FM // Built by a listener //</span>
-      <span>● Unofficial fan-made tool // Not affiliated with or endorsed by Freaks Only FM // Built by a listener //</span>
+    <div class="ticker__track" id="tickerTrack">
+      <span class="ti">// Tuning in&hellip;</span>
+      <span class="ti">// Tuning in&hellip;</span>
     </div>
   </div>
 
@@ -190,5 +191,68 @@
     </section>
 
   </div>
+
+  <script>
+    (function () {
+      var API = "https://api.live365.com/station/a77923";
+      var track = document.getElementById("tickerTrack");
+      if (!track) return;
+
+      function clean(s) { return (s || "").toString().trim(); }
+
+      function fmt(t) {
+        t = t || {};
+        var a = clean(t.artist), ti = clean(t.title);
+        if (a && ti) return a + " — " + ti;   // artist — title
+        return ti || a || "";
+      }
+
+      // returns [{ text, now }] or [] if nothing usable
+      function buildItems(d) {
+        var items = [];
+        var now = fmt(d["current-track"]);
+        if (now) items.push({ text: "Now playing: " + now, now: true });
+        var last = d["last-played"] || [];
+        for (var i = 0; i < last.length && items.length < 8; i++) {
+          var s = fmt(last[i]);
+          if (s) items.push({ text: s, now: false });
+        }
+        return items;
+      }
+
+      function spanFor(item) {
+        var s = document.createElement("span");
+        s.className = "ti" + (item.now ? " now" : "");
+        s.textContent = "// " + item.text;
+        return s;
+      }
+
+      function render(items) {
+        if (!items.length) return;
+        track.innerHTML = "";
+        // two identical copies → seamless -50% loop
+        for (var c = 0; c < 2; c++) {
+          for (var i = 0; i < items.length; i++) track.appendChild(spanFor(items[i]));
+        }
+        // pace it at a steady speed regardless of content length
+        var half = track.scrollWidth / 2;
+        track.style.animationDuration = Math.max(18, Math.round(half / 55)) + "s";
+      }
+
+      function load() {
+        fetch(API, { cache: "no-store" })
+          .then(function (r) { return r.json(); })
+          .then(function (d) { render(buildItems(d)); })
+          .catch(function () {
+            // leave whatever's on screen; show a gentle fallback only on first fail
+            if (track.querySelector(".now")) return;
+            render([{ text: "Live at freaksonly.fm", now: false }]);
+          });
+      }
+
+      load();
+      setInterval(load, 30000);
+    })();
+  </script>
 </body>
 </html>
