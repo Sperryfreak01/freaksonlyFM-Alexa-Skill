@@ -63,16 +63,6 @@
     .mark { font-weight: 800; letter-spacing: .04em; }
     .mark .sep { color: var(--accent); }
 
-    /* live status indicator */
-    .status { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
-    .status::before {
-      content: ''; display: inline-block;
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--accent);
-      animation: pulse 2s ease-in-out infinite;
-    }
-    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
-
     /* equalizer */
     .eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
     .eq i { width: 2px; background: var(--accent); animation: eq 1s ease-in-out infinite; }
@@ -141,14 +131,6 @@
     /* #about section — extra bottom breathing room before footer */
     #about { padding-bottom: 48px; }
 
-    footer {
-      border-top: 1px solid var(--line);
-      padding: 24px 0 48px; color: var(--muted); font-size: 11px;
-      letter-spacing: .08em; text-transform: uppercase;
-      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
-    }
-    footer a { border-bottom: 1px solid var(--line); text-decoration: none; transition: color .15s, border-color .15s; }
-    footer a:hover { color: var(--fg); border-color: var(--fg); }
   </style>
 </head>
 <body>
@@ -164,7 +146,6 @@
 
     <div class="bar">
       <span class="mark">ALEXA TUNER <span class="sep">//</span> UNOFFICIAL</span>
-      <span class="status">LIVE</span>
     </div>
 
     <header class="hero">
@@ -222,11 +203,6 @@
         <p>The real station lives at <a href="https://freaksonly.fm">freaksonly.fm</a>.</p>
       </div>
     </section>
-
-    <footer>
-      <span>&copy; Fan project &mdash; not affiliated with FREAKS ONLY FM</span>
-      <a href="https://freaksonly.fm">freaksonly.fm &rarr;</a>
-    </footer>
 
   </div>
 
